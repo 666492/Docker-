@@ -47,6 +47,8 @@ echo "deb https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) s
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+---
+
 ## 3. 项目结构
 
 创建项目根目录 /root/docker-app-demo，目录结构如下：
