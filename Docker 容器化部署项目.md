@@ -41,7 +41,7 @@ newgrp docker   # 或重新登录
 docker --version
 docker compose version
 
-#备选方案：若出现 GPG 签名错误，可改用 apt-key 方式：
+# 备选方案：若出现 GPG 签名错误，可改用 apt-key 方式：
 curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
 echo "deb https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
 sudo apt update
@@ -49,7 +49,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 
 ---
 
-## 3. 项目结构
+## 3.项目结构
 
 创建项目根目录 /root/docker-app-demo，目录结构如下：
 docker-app-demo/
@@ -70,6 +70,8 @@ docker-app-demo/
 │   └── conf.d/
 │       └── default.conf
 └── docker-compose.yml
+
+---
 
 ## 4. 构建步骤
 
@@ -253,6 +255,8 @@ MySQL 和 Redis 配置健康检查，后端依赖它们健康后再启动。
 数据卷挂载实现数据持久化。
 重启策略 unless-stopped 保障服务自动恢复。
 
+---
+
 ## 5. 镜像拉取问题与解决（国内网络环境）
 若出现拉取镜像失败（如 connection refused 或 no such host），可尝试以下方案：
 
@@ -288,6 +292,8 @@ scp images.tar root@192.168.113.132:/root/
 docker load -i /root/images.tar
 完成导入后，镜像即可正常使用，无需在线拉取。
 
+---
+
 ## 6. 启动服务
 cd /root/docker-app-demo
 docker compose up -d --build
@@ -295,12 +301,16 @@ docker compose up -d --build
 docker compose ps
 docker compose logs -f      # 实时查看所有日志
 
+---
+
 ## 7. 验证访问
 前端页面：http://192.168.113.132:8081
 后端 API（若示例 JAR 包含 /hello）：http://192.168.113.132:8081/api/hello
 使用 curl 快速测试：
 curl http://192.168.113.132:8081
 curl http://192.168.113.132:8081/api/hello
+
+---
 
 ## 8. 常用运维命令
 # 停止所有容器（保留数据卷）
@@ -321,9 +331,13 @@ docker compose logs --tail=100 backend
 # 查看资源占用
 docker stats
 
+---
+
 ## 9. 替换为实际项目
 将您的后端 JAR 覆盖 backend/app.jar，前端构建产物（dist）覆盖 frontend/dist，然后重新构建：
 docker compose up -d --build
+
+---
 
 ## 描述
 使用 Docker 对前后端服务进行容器化改造，编写 Dockerfile 和 docker-compose 文件，实现 Spring Boot 应用、MySQL、Redis、前端 Nginx、网关 Nginx 的一键部署。采用轻量级基础镜像（Alpine、JRE Slim）优化镜像体积，镜像大小缩减约 80%。配置健康检查与服务依赖顺序，确保数据库就绪后再启动应用；设置重启策略（unless-stopped）实现故障自动恢复；通过数据卷挂载实现数据持久化；仅暴露网关端口作为统一入口，提高环境迁移和运维效率。
